@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import LinearModel from './LinearModel';
+import ComplexModel from './ComplexModel';
 
 const Home = () => (
   <h2>Home page</h2>
-);
-
-const ComplexModel = () => (
-  <h2>Complex Model</h2>
 );
 
 const DigitRecognizer = () => (
