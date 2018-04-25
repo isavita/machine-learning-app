@@ -14,12 +14,11 @@ class LinearModel extends Component {
 
   componentWillMount() {
     // Define model
-    this.state.linearRegression.add(tf.layers.dense({units: 50, inputShape: 1}));
-    this.state.linearRegression.add(tf.layers.dense({units: 50}));
+    this.state.linearRegression.add(tf.layers.dense({units: 5, inputShape: 1}));
     this.state.linearRegression.add(tf.layers.dense({units: 1}));
 
     // Specify the loss function and the backpropagation algorithm
-    const learningRate = 0.001;
+    const learningRate = 0.1;
     const optimizer = tf.train.adam(learningRate);
     this.state.linearRegression.compile({
       loss: 'meanSquaredError',
@@ -33,7 +32,14 @@ class LinearModel extends Component {
     const ys = tf.tensor1d(this.state.prices);
 
     // Train
-    this.state.linearRegression.fit(xs, ys);
+    const batchSize = 16;
+    const numEpochs = 100;
+    const callbacks = {
+      onBatchEnd: (batch, logs) => {
+        console.log(logs.loss.toFixed(5));
+      }
+    };
+    this.state.linearRegression.fit(xs, ys, {batchSize, epochs: numEpochs, callbacks: callbacks});
   }
 
   predict = (value) => {
@@ -91,7 +97,7 @@ class LinearModel extends Component {
 
           <button type='submit'>Submit</button>
         </form>
-        <p>House price: {this.state.predictedPrice.toFixed(2)}$</p>
+        <p>House price: {this.state.predictedPrice}k$</p>
       </div>
     );
   }

@@ -1,54 +1,64 @@
 import React, { Component } from 'react';
 import * as tf from '@tensorflow/tfjs';
-import ReactFileReader from 'react-file-reader';
-import { CsvToHtmlTable } from 'react-csv-to-table';
+import { Form, FormGroup, FormControl } from 'react-bootstrap';
+
+let housesData = require('../data/houses.json');
 
 class ComplexModel extends Component {
   state = {
+    prices: housesData.price,
+    sqft: housesData.sqft,
+    floors: housesData.floors,
+    bedrooms: housesData.bedrooms,
+    bathrooms: housesData.bathrooms,
     linearRegression: tf.sequential(),
-    csvHousesData: '',
     predictedPrice: null,
   };
 
-  handleFilesUpload = (files) => {
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      this.setState({
-        csvHousesData: reader.result
-      });
-    }
-    reader.readAsText(files[0]);
-  }
-
   componentWillMount() {
     // Define model
-    this.state.linearRegression.add(tf.layers.dense({units: 10, inputShape: 1}));
-    this.state.linearRegression.add(tf.layers.dense({units: 1}));
+    this.state.linearRegression.add(tf.layers.dense({
+      units: 20, inputShape: 4, kernelInitializer: 'randomUniform'
+    }));
+    this.state.linearRegression.add(tf.layers.dense({
+      units: 20, kernelInitializer: 'randomUniform'
+    }));
+    this.state.linearRegression.add(tf.layers.dense({
+      units: 1, kernelInitializer: 'randomUniform'
+    }));
 
     // Specify the loss function and the backpropagation algorithm
-    const learningRate = 0.3;
+    const learningRate = 0.1;
     const optimizer = tf.train.adam(learningRate);
-    this.state.linearRegression.compile({loss: 'meanSquaredError', optimizer: optimizer});
+    this.state.linearRegression.compile({
+      loss: 'meanSquaredError',
+      optimizer: 'adam',
+    });
 
     // Training data
-    // House square footage
-    const xs = tf.tensor1d([
-      1180, 2570, 770, 1960, 1680, 5420, 1715, 1060, 1780, 1890, 3560, 1160,
-      1430, 1370, 1810, 2950, 1890, 1600, 1200, 1250
-    ]);
+    // House features
+    let features = [];
+    for (let i = 0; i < this.state.prices.length; i++) {
+      features.push([
+        this.state.sqft[i], this.state.floors[i], this.state.bedrooms[i], this.state.bathrooms[i]
+      ]);
+    }
+    const xs = tf.tensor2d(features);
     // House price in US dollars
-    const ys = tf.tensor1d([
-      221900, 538000, 180000, 604000, 510000, 1225000, 257500, 291850, 229500, 323000, 662500,
-      468000, 310000, 400000, 530000, 650000, 395000, 485000, 189000, 230000
-    ]);
+    const ys = tf.tensor1d(this.state.prices);
 
     // Train
-    this.state.linearRegression.fit(xs, ys);
+    const callbacks = {
+      onBatchEnd: (batch, logs) => {
+        console.log(logs.loss.toFixed(5));
+      }
+    };
+    this.state.linearRegression.fit(xs, ys, {callbacks: callbacks});
   }
 
   predict = (value) => {
     // Prediction
-    const price = this.state.linearRegression.predict(tf.tensor2d([value], [1, 1]));
+    const price = this.state.linearRegression.predict(tf.tensor2d(value, [1, 4]));
     const formattedPrice = Array.from(price.dataSync())[0];
 
     return formattedPrice;
@@ -56,21 +66,37 @@ class ComplexModel extends Component {
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    const squareFeet = ev.target['square-feet'].value;
-    const predictedPrice = this.predict(squareFeet);
+    const features = [
+      ev.target['sqft'].value,
+      ev.target['floors'].value,
+      ev.target['bedrooms'].value,
+      ev.target['bathrooms'].value
+    ];
+
+    const predictedPrice = this.predict(features);
     
     this.setState({predictedPrice: predictedPrice});
   };
 
   render() {
+      
       return (
-      <div>
-        <h1>Complex Model</h1>
-        <ReactFileReader handleFiles={this.handleFilesUpload} fileTypes={'.csv'}>
-          <button className='btn'>Upload Training Data</button>
-        </ReactFileReader>
-        <CsvToHtmlTable data={this.state.csvHousesData} csvDelimiter=',' />
-      </div>
+        <div>
+          <h1>Complex Model</h1>
+          <form onSubmit={this.handleSubmit}>
+            <label htmlFor='sqft'>Sqft</label>
+            <input id='sqft' type='text' required /><br />
+            <label htmlFor='floors'>Floors</label>
+            <input id='floors' type='text' required /><br />
+            <label htmlFor='bedrooms'>Bedrooms</label>
+            <input id='bedrooms' type='text' required /><br />
+            <label htmlFor='bathrooms'>Bathrooms</label>
+            <input id='bathrooms' type='text' required /><br />
+
+            <button type='submit'>Submit</button>
+          </form>
+          <p>House price: {this.state.predictedPrice}k$</p>
+        </div>
     );
   }
 }
