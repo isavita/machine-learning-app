@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs';
 
 class SimpleLinearRegression {
-  constructor(learningRate = 0.1, numIterations = 100) {
+  constructor(learningRate = 0.01, numIterations = 100) {
     this.learningRate = learningRate;
     this.numIterations = numIterations;
     // Variables that we want to learn from the data
@@ -12,7 +12,9 @@ class SimpleLinearRegression {
 
   predict(x) {
     // Uses line model: y = a * x + b
-    return tf.tidy(() => (this.a.mul(tf.scalar(x)).add(this.b)));
+    return tf.tidy(() => {
+      return this.a.mul(x).add(this.b)
+    });
   }
 
   loss(predictions, actuals) {
@@ -27,7 +29,6 @@ class SimpleLinearRegression {
       this.optimizer.minimize(() => {
         const prediction = this.predict(xs);
         const cost = this.loss(prediction, ys);
-        console.log(Array.from(cost.dataSync())[0]);
         return cost;
       });
 
