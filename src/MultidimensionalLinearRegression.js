@@ -56,7 +56,10 @@ class MultidimensionalLinearRegression {
     this.model.fit(xs, ys, { epoches: this.epoches, callbacks: callbacks})
       .then(() => {
         handleTrainingCompleted(lossData);
-      });
+        xs.dispose();
+        ys.dispose();
+    });
+
   }
 
   predict(x) {
@@ -64,7 +67,9 @@ class MultidimensionalLinearRegression {
     const normX2 = x[1] / this.maxX2;
     const normX3 = x[2] / this.maxX3;
     const normX4 = x[3] / this.maxX4;
-    const result = this.model.predict(tf.tensor2d([normX1, normX2, normX3, normX4], [1, 4]));
+    const features = tf.tensor2d([normX1, normX2, normX3, normX4], [1, 4]);
+    const result = this.model.predict(features);
+    features.dispose();
     return Array.from(result.dataSync())[0] * this.maxY;
   }
 

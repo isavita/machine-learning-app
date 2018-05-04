@@ -11,7 +11,7 @@ const Info = () => (
     <ListGroupItem href='https://www.learnopencv.com/understanding-activation-functions-in-deep-learning/' target='_blank'>Activation Functions</ListGroupItem>
     <ListGroupItem href='http://www.deeplearningbook.org/' target='_blank'>Comprehensive online book</ListGroupItem>
     <ListGroupItem href='http://neuralnetworksanddeeplearning.com/' target='_blank'>Online practical book</ListGroupItem>
+    <ListGroupItem href='https://www.nytimes.com/2018/04/19/technology/artificial-intelligence-salaries-openai.html' target='_blank'>Why Machine Learning?</ListGroupItem>
   </ListGroup>
 );
-
 export default Info;
