@@ -5,7 +5,12 @@ import { Navbar, Nav, NavItem } from 'react-bootstrap';
 class TopBar extends Component {
   render() {
     return (
-      <Navbar inverse collapseOnSelect staticTop>
+      <Navbar inverse>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <a href="#home">Machine learning</a>
+          </Navbar.Brand>
+        </Navbar.Header>
         <Nav>
           <NavItem componentClass={Link} href='/simple-line-model' to='/simple-line-model' active={'location.pathname' === '/linear-model'}>
             Simple Line Model
@@ -17,7 +22,7 @@ class TopBar extends Component {
             Complex Model
           </NavItem>
           <NavItem componentClass={Link} href='/' to='/' active={'location.pathname' === '/'}>
-            Links 
+            Links
           </NavItem>
         </Nav>
       </Navbar>
@@ -26,3 +31,4 @@ class TopBar extends Component {
 }
 
 export default TopBar;
+

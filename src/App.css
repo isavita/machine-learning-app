@@ -1,6 +1,5 @@
-.App {
-  margin: 10px;
-}
+@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
+
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
