@@ -5,12 +5,9 @@
   "dependencies": {
     "@tensorflow/tfjs": "^0.9.1",
     "bootstrap": "^4.1.0",
-    "csv-parser": "^1.12.1",
-    "fast-csv": "^2.4.1",
     "json-loader": "^0.5.7",
     "react": "^16.3.2",
     "react-bootstrap": "^0.32.1",
-    "react-csv-to-table": "^0.0.1",
     "react-dom": "^16.3.2",
     "react-easy-chart": "^1.0.0",
     "react-file-reader": "^1.1.4",

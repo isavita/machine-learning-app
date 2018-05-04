@@ -97,13 +97,6 @@ class LinearModel extends Component {
           width={960}
           height={540}
         />
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor='sqft'>Sqft</label>
-          <input id='sqft' type='text' required />
-
-          <button type='submit'>Submit</button>
-        </form>
-        <p>House price: {this.state.predictedPrice}k$</p>
         */
       </div>
     );

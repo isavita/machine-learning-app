@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import SimpleLinearRegression from '../SimpleLinearRegression';
 import LinearRegression from '../LinearRegression';
-import { ScatterplotChart, LineChart } from 'react-easy-chart';
 import HousePriceChart from './HousePriceChart';
 import LossChart from './LossChart';
-import RandomLineChart from './RandomLineChart';
 
 let housesData = require('../data/houses.json');
 
@@ -26,14 +23,32 @@ const TrainingButtonToggle = (props) => {
   }
 };
 
+const PricePredictionForm = (props) => {
+  if (props.trainingCompleted) {
+    return (
+      <div className='price-prediction-form'>
+        <form onSubmit={props.handleSubmit}>
+          <label htmlFor='sqft'>Sqft</label>
+          <input id='sqft' type='text' required />
+
+          <button type='submit'>Submit</button>
+        </form>
+      </div>
+    );
+  } else {
+    return null;
+  }
+};
+
 class LinearModel extends Component {
   linearRegression = new LinearRegression();
 
   state = {
-    prices: housesData.price.slice(0, 5000),
-    sqft: housesData.sqft.slice(0, 5000),
+    prices: housesData.price.slice(0, 1000),
+    sqft: housesData.sqft.slice(0, 1000),
     trainingCompleted: false,
     lossData: null,
+    predictedPrice: null,
   };
 
   handleTrainButtonClick = (ev) => {
@@ -48,15 +63,29 @@ class LinearModel extends Component {
     });
   }
 
+  handlePredictionSubmit = (ev) => {
+    ev.preventDefault();
+    const squareFeet = parseFloat(ev.target['sqft'].value);
+    const predictedPrice = Math.ceil(this.linearRegression.predict(squareFeet));
+    
+    this.setState({predictedPrice: predictedPrice});
+  }
+
   render() {
+    const housePrice = this.state.predictedPrice ? (<p>House price: {this.state.predictedPrice}</p>) : null;
     return (
       <div>
-        <h1>Liner Model</h1>
+        <h1>Liner Model With Neural Network</h1>
         <HousePriceChart sqft={this.state.sqft} prices={this.state.prices} />
         <TrainingButtonToggle
           data={this.state.lossData}
           handleTrainButtonClick={this.handleTrainButtonClick}
         />
+        <PricePredictionForm 
+          trainingCompleted={this.state.trainingCompleted}
+          handleSubmit={this.handlePredictionSubmit}
+        />
+        {housePrice}
       </div>
     );
   }

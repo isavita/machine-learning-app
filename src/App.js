@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import TopBar from './components/TopBar';
 import Main from './components/Main';
-import logo from './logo.svg';
 import './App.css';
 
 

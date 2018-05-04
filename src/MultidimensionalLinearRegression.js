@@ -1,12 +1,12 @@
 import * as tf from '@tensorflow/tfjs';
 
-class LinearRegression {
+class MultidimensionalLinearRegression {
   constructor(learningRate = 0.01, epoches = 200) {
     this.learningRate = learningRate;
     this.epoches = epoches;
     this.model = tf.sequential();
     this.model.add(tf.layers.dense({
-      units: 256, inputShape: [1], kernelInitializer: 'randomUniform'
+      units: 256, inputShape: [4], kernelInitializer: 'randomUniform'
     }));
     this.model.add(tf.layers.dense({
       units: 128, kernelInitializer: 'randomUniform'
@@ -44,7 +44,7 @@ class LinearRegression {
 
   predict(x) {
     const normX = x / this.maxX;
-    const result = this.model.predict(tf.tensor2d([normX], [1, 1]));
+    const result = this.model.predict(tf.tensor2d([normX], [1, 4]));
     return Array.from(result.dataSync())[0] * this.maxY;
   }
 
@@ -57,4 +57,4 @@ class LinearRegression {
   }
 }
 
-export default LinearRegression;
+export default MultidimensionalLinearRegression;
