@@ -6,7 +6,10 @@ import ComplexModel from './ComplexModel';
 import Info from './Info';
 
 const Home = () => (
-  <h2>Machine Learning 100.9</h2>
+  <div>
+    <h2>Machine Learning 100.9</h2>
+    <img src='https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/assets/neuralnetworks.png' />
+  </div>
 );
 
 class Main extends Component {
@@ -15,10 +18,10 @@ class Main extends Component {
       <div className='main'>
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route path='/simple-line-model' component={SimpleLineModel} /> 
-          <Route path='/linear-model' component={LinearModel} /> 
-          <Route path='/complex-model' component={ComplexModel} />
-          <Route path='/info' component={Info} />
+          <Route exact path='/simple-line-model' component={SimpleLineModel} />
+          <Route exact path='/linear-model' component={LinearModel} />
+          <Route exact path='/complex-model' component={ComplexModel} />
+          <Route exact path='/info' component={Info} />
         </Switch>
       </div>
     );

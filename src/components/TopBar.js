@@ -8,7 +8,7 @@ class TopBar extends Component {
       <Navbar inverse>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#home">Machine learning</a>
+            <a href='/'>Machine learning</a>
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
@@ -21,8 +21,8 @@ class TopBar extends Component {
           <NavItem componentClass={Link} href='/complex-model' to='/complex-model' active={'location.pathname' === '/complex-model'}>
             Complex Model
           </NavItem>
-          <NavItem componentClass={Link} href='/' to='/' active={'location.pathname' === '/'}>
-            Links
+          <NavItem componentClass={Link} href='/info' to='/info' active={'location.pathname' === '/'}>
+            Useful Links
           </NavItem>
         </Nav>
       </Navbar>

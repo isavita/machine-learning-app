@@ -67,7 +67,7 @@ class LinearModel extends Component {
     ev.preventDefault();
     const squareFeet = parseFloat(ev.target['sqft'].value);
     const predictedPrice = Math.ceil(this.linearRegression.predict(squareFeet));
-    
+
     this.setState({predictedPrice: predictedPrice});
   }
 
@@ -81,7 +81,7 @@ class LinearModel extends Component {
           data={this.state.lossData}
           handleTrainButtonClick={this.handleTrainButtonClick}
         />
-        <PricePredictionForm 
+        <PricePredictionForm
           trainingCompleted={this.state.trainingCompleted}
           handleSubmit={this.handlePredictionSubmit}
         />
